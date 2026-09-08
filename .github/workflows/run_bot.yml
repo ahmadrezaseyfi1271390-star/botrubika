@@ -1,0 +1,37 @@
+name: Run Rubika Bot
+
+on:
+  workflow_dispatch:  # فقط با کلیک دستی اجرا میشه
+  push:              # (اختیاری) موقع هر کامیت هم اجرا میشه
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360  # ۶ ساعت اجرا میشه بعد خودکار متوقف میشه
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Create download folder
+      run: |
+        mkdir -p ./downloads
+        echo "📁 پوشه دانلود ساخته شد"
+    
+    - name: Show folder content
+      run: |
+        echo "📂 محتویات پوشه downloads:"
+        ls -la ./downloads || echo "پوشه خالی است"
+    
+    - name: Run bot
+      run: |
+        python bot.py
